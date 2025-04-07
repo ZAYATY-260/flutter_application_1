@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/confirmLocation.dart';
 import 'package:flutter_application_1/screens/thankyou.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -105,7 +106,18 @@ class _UploadReportState extends State<UploadReport> {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text("Detect Location", style: TextStyle(fontSize: 12, color: Colors.black45)),
+              GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ConfirmLocationScreen()),
+                        );
+                      },
+                      child: const Text(
+                        "Detect Location",
+                        style: TextStyle(fontSize: 12, color: Colors.black45),
+                      ),
+                    ),
 
               const Spacer(),
 
