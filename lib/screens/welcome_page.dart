@@ -14,15 +14,11 @@ class WelcomePage extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              top: 0,
-              right: -120,
+              top: 90,
+              right: 0,
               child: Opacity(
                 opacity: 0.08,
-                child: Image.asset(
-                  'recycle-bin.png',
-                  width: 500,
-                  height: 600,
-                ),
+                child: Icon(Icons.delete_outline, size: 210),
               ),
             ),
             SingleChildScrollView(
