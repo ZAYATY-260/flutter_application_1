@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/homepage.dart';
+import 'package:flutter_application_1/screens/reports.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -16,7 +17,7 @@ class ProfilePage extends StatelessWidget {
         showUnselectedLabels: true,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.report), label: "Reports"),
+          BottomNavigationBarItem(icon: Icon(Icons.article), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
         onTap: (int index) {
@@ -24,6 +25,12 @@ class ProfilePage extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          } else if (index == 1)
+          {
+             Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ReportsPage()),
             );
           }
         },

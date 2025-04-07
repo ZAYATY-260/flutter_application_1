@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/profilepage.dart';
+import 'package:flutter_application_1/screens/reports.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -18,6 +19,12 @@ class HomePage extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          } else if (index == 1)
+          {
+             Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ReportsPage()),
             );
           }
         },

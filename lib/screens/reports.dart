@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/ProfilePage.dart';
+import 'package:flutter_application_1/screens/homepage.dart';
 import 'package:flutter_application_1/screens/reportDetails.dart';
 
 
@@ -51,6 +53,33 @@ class _ReportsPageState extends State<ReportsPage> {
       appBar: AppBar(
         title: Text('My Reports'),
         centerTitle: true,
+      ),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[200],
+        currentIndex: 1,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black54,
+        showUnselectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.article), label: "Reports"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+        onTap: (int index) {
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          } else if(index == 2)
+          {
+             Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          }
+        },
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(16),
