@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/profilepage.dart';
 import 'package:flutter_application_1/screens/reports.dart';
+import 'package:flutter_application_1/screens/uploadReport.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -116,7 +117,7 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 120),
 
                         // More Services Title
                         Row(
@@ -138,12 +139,36 @@ class HomePage extends StatelessWidget {
                         // Services Icons
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            ServiceIcon(iconPath: "assets/streetlight.jpg"),
-                            ServiceIcon(iconPath: "assets/garbage.png"),
-                            ServiceIcon(iconPath: "assets/crack.png"),
-                          ],
-                        ),
+                         children: [
+                          ServiceIcon(
+                            iconPath: "assets/streetlight.jpg",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => UploadReport()),
+                              );
+                            },
+                          ),
+                          ServiceIcon(
+                            iconPath: "assets/garbage.png",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => UploadReport()),
+                              );
+                            },
+                          ),
+                          ServiceIcon(
+                            iconPath: "assets/crack.png",
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => UploadReport()),
+                              );
+                            },
+                          ),
+                        ],
+                                              ),
 
                         const SizedBox(height: 20),
                       ],
@@ -161,14 +186,18 @@ class HomePage extends StatelessWidget {
 
 class ServiceIcon extends StatelessWidget {
   final String iconPath;
+  final VoidCallback? onTap;
 
-  const ServiceIcon({super.key, required this.iconPath});
+  const ServiceIcon({super.key, required this.iconPath, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 90,
-      height: 90,
+      return GestureDetector(
+      onTap: onTap,
+    // ignore: unused_label
+    child:  Container(
+      width: 120,
+      height: 120,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black26),
@@ -176,6 +205,7 @@ class ServiceIcon extends StatelessWidget {
         color: Colors.white,
       ),
       child: Image.asset(iconPath, fit: BoxFit.contain),
+    ),
     );
   }
 }
