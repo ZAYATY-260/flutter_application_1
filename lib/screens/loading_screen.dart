@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/screens/homepage.dart';
 import 'welcome_page.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -17,10 +19,22 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Future<void> _startLoading() async {
     await Future.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const WelcomePage()),
-    );
+    
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // User is already signed in
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      // User is not signed in
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomePage()),
+      );
+    }
   }
 
   @override
