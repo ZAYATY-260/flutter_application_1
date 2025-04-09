@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/homepage.dart';
-
 import 'signup_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -16,7 +15,8 @@ class _WelcomePageState extends State<WelcomePage> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isLoading = false; // To handle loading state
-  String? _errorText;
+  String? _emailError;
+  String? _passwordError;
 
   // Function to handle login with email and password
   Future<void> _login() async {
@@ -24,12 +24,14 @@ class _WelcomePageState extends State<WelcomePage> {
     String password = _passwordController.text.trim();
 
     setState(() {
-      _errorText = null; // Reset error message
+      _emailError = null; // Reset email error
+      _passwordError = null; // Reset password error
     });
 
     if (email.isEmpty || password.isEmpty) {
       setState(() {
-        _errorText = 'Please enter your email and password';
+        if (email.isEmpty) _emailError = 'Please enter your email';
+        if (password.isEmpty) _passwordError = 'Please enter your password';
       });
       return;
     }
@@ -54,7 +56,17 @@ class _WelcomePageState extends State<WelcomePage> {
     } catch (e) {
       setState(() {
         _isLoading = false; // Hide loading indicator
-        _errorText = 'Email or password is not correct'; // Generic error message
+        if (e is FirebaseAuthException) {
+          if (e.code == 'user-not-found') {
+            _emailError = 'No user found with this email';
+          } else if (e.code == 'wrong-password') {
+            _passwordError = 'Incorrect password';
+          } else {
+            _passwordError = 'Error logging in: ${e.message}';
+          }
+        } else {
+          _emailError = 'Error logging in: ${e.toString()}';
+        }
       });
     }
   }
@@ -64,7 +76,6 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-<<<<<<< HEAD
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -98,30 +109,6 @@ class _WelcomePageState extends State<WelcomePage> {
                         color: Colors.black12,
                         blurRadius: 12,
                         spreadRadius: 3,
-=======
-        child: Stack(
-          children: [
-            Positioned(
-              top: 90,
-              right: 0,
-              child: Opacity(
-                opacity: 0.08,
-                child: Icon(Icons.delete_outline, size: 210),
-              ),
-            ),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 100),
-                    const Text(
-                      'Hello User\nWelcome!',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
->>>>>>> 04f54d7a29511e1ef9fd08d2a8bfb66a17d0214b
                       ),
                     ],
                   ),
@@ -145,7 +132,7 @@ class _WelcomePageState extends State<WelcomePage> {
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 18, horizontal: 14),
-                          errorText: _errorText != null ? _errorText : null,
+                          errorText: _emailError,
                         ),
                       ),
                       const SizedBox(height: 28),
@@ -171,7 +158,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               });
                             },
                           ),
-                          errorText: _errorText != null ? _errorText : null,
+                          errorText: _passwordError,
                         ),
                       ),
                       const SizedBox(height: 28),
