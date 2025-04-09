@@ -120,6 +120,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
           'name': _nameController.text,
           'email': _emailController.text,
           'phone': _phoneController.text,
+           'type': 'user',
         });
 
         // Navigate to FireworksPage

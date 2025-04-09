@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/adminPage.dart';
 import 'package:flutter_application_1/screens/homepage.dart';
 import 'signup_page.dart';
 
@@ -41,34 +43,53 @@ class _WelcomePageState extends State<WelcomePage> {
     });
 
     try {
-      // Authenticate using Firebase
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+  UserCredential userCredential = await FirebaseAuth.instance
+      .signInWithEmailAndPassword(email: email, password: password);
 
-      setState(() {
-        _isLoading = false; // Hide loading indicator
-      });
+  final uid = userCredential.user?.uid;
+  if (uid == null) throw FirebaseAuthException(code: 'invalid-user');
 
-      // Navigate to home page after successful login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (e) {
-      setState(() {
-        _isLoading = false; // Hide loading indicator
-        if (e is FirebaseAuthException) {
-          if (e.code == 'user-not-found') {
-            _emailError = 'No user found with this email';
-          } else if (e.code == 'wrong-password') {
-            _passwordError = 'Incorrect password';
-          } else {
-            _passwordError = 'Error logging in: ${e.message}';
-          }
-        } else {
-          _emailError = 'Error logging in: ${e.toString()}';
-        }
-      });
+  final userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+  if (!userDoc.exists) {
+    throw FirebaseAuthException(code: 'user-not-found');
+  }
+
+  final userData = userDoc.data();
+  final userType = userData?['type'] ?? 'user';
+
+  setState(() {
+    _isLoading = false;
+  });
+
+  if (userType == 'admin') {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => AdminPage()), // Replace with your AdminPage
+    );
+  } else {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
+  }
+} catch (e) {
+  setState(() {
+    _isLoading = false;
+    if (e is FirebaseAuthException) {
+      if (e.code == 'user-not-found') {
+        _emailError = 'No user found with this email';
+      } else if (e.code == 'wrong-password') {
+        _passwordError = 'Incorrect password';
+      } else {
+        _passwordError = 'Error logging in: ${e.message}';
+      }
+    } else {
+      _emailError = 'Error logging in: ${e.toString()}';
     }
+  });
+}
+
   }
 
   @override
