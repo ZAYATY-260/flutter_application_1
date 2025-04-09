@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "585980402153",
+    "project_id": "shaware3na-254f9",
+    "storage_bucket": "shaware3na-254f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585980402153:android:1d5869be5f6ce9702cd378",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCej8pMs2DF98PGmy__TJUI7NkTAiNAN0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

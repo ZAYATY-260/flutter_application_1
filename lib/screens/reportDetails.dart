@@ -1,41 +1,100 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/reports.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
+class AccidentDetectionPage extends StatefulWidget {
+  @override
+  _AccidentDetectionPageState createState() => _AccidentDetectionPageState();
+}
 
-class ReportDetailsPage extends StatelessWidget {
-  final Report report;
+class _AccidentDetectionPageState extends State<AccidentDetectionPage> {
+  final ImagePicker _picker = ImagePicker();
+  String? _imageUrl;
 
-  const ReportDetailsPage({Key? key, required this.report}) : super(key: key);
+  // Roboflow API URL and API Key
+  final String _apiUrl = 'https://detect.roboflow.com';
+  final String _apiKey = 'wBWQCEsJDkSyCXINXUyo';
+  final String _modelId = 'accident-classification-jbmo5/7'; // Your model ID
+
+  // Pick an image
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _imageUrl = pickedFile.path;
+      });
+      _detectAccident(pickedFile);
+    }
+  }
+
+  // Call the Roboflow API for detection
+  Future<void> _detectAccident(XFile image) async {
+    final uri = Uri.parse("$_apiUrl/$_modelId?api_key=$_apiKey");
+
+    final request = http.MultipartRequest('POST', uri);
+    request.files.add(await http.MultipartFile.fromPath('image', image.path));
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final respStr = await response.stream.bytesToString();
+      final decodedResponse = jsonDecode(respStr);
+
+      // Handle the prediction results
+      _showDetectionResults(decodedResponse);
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+  // Show the detection results
+  void _showDetectionResults(Map<String, dynamic> results) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Detection Results"),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Predictions:"),
+                // Iterate through the results and display them
+                for (var prediction in results['predictions'])
+                  Text("${prediction['class']} detected with confidence ${prediction['confidence']}"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(report.title),
+        title: Text("Accident Detection"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text(report.description),
-            SizedBox(height: 16),
-            Text('Status: ${report.status}', style: TextStyle(color: Colors.blueGrey)),
-            SizedBox(height: 24),
-            Text('Images', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            SizedBox(
-              height: 200,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: report.images.length,
-                separatorBuilder: (context, index) => SizedBox(width: 10),
-                itemBuilder: (context, index) => ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset("assets/streetlight.jpg"),
-                ),
-              ),
+            _imageUrl == null
+                ? Text("No image selected.")
+                : Image.file(File(_imageUrl!)),
+            ElevatedButton(
+              onPressed: _pickImage,
+              child: Text("Pick Image for Detection"),
             ),
           ],
         ),

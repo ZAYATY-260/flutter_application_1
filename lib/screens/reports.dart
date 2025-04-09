@@ -104,7 +104,7 @@ class _ReportsPageState extends State<ReportsPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ReportDetailsPage(report: report),
+                    builder: (context) => AccidentDetectionPage(),
                   ),
                 );
               },
