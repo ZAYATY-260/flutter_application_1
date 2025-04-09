@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/GeminiChatPage.dart';
 import 'package:flutter_application_1/screens/ProfilePage.dart';
 import 'package:flutter_application_1/screens/homepage.dart';
 import 'package:flutter_application_1/screens/reportDetails.dart';
@@ -65,6 +66,7 @@ class _ReportsPageState extends State<ReportsPage> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.article), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: "Message AI"),
         ],
         onTap: (int index) {
           if (index == 0) {
@@ -77,6 +79,11 @@ class _ReportsPageState extends State<ReportsPage> {
              Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          }else if (index == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => GeminiChatPage()),
             );
           }
         },

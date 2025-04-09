@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/screens/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_application_1/screens/GeminiChatPage.dart'; // make sure this exists
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -45,9 +46,10 @@ class _ProfilePageState extends State<ProfilePage> {
         unselectedItemColor: Colors.black54,
         showUnselectedLabels: true,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.article), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: "Message AI"),
         ],
         onTap: (int index) {
           if (index == 0) {
@@ -59,6 +61,11 @@ class _ProfilePageState extends State<ProfilePage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => ReportsPage()),
+            );
+          }else if (index == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => GeminiChatPage()),
             );
           }
         },
