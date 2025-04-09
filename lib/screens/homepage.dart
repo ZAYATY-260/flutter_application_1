@@ -3,8 +3,34 @@ import 'package:flutter_application_1/screens/profilepage.dart';
 import 'package:flutter_application_1/screens/reports.dart';
 import 'package:flutter_application_1/screens/uploadReport.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<Map<String, String>> allPosts = [
+    {"image": "assets/reports/car accident.jpg", "caption": "Streetlight broken on Main St", "time": "2 hours ago", "location": "Main St, City"},
+    {"image": "assets/reports/earthquake.jpg", "caption": "Overflowing trash can on 5th Ave", "time": "4 hours ago", "location": "5th Ave, City"},
+    {"image": "assets/reports/Fire.jpg", "caption": "Crack in sidewalk on Broadway St", "time": "6 hours ago", "location": "Broadway St, City"},
+  ];
+
+  List<Map<String, String>> displayedPosts = [];
+  int postLimit = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPosts();
+  }
+
+  void _loadPosts() {
+    setState(() {
+      displayedPosts = allPosts.take(postLimit).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +47,8 @@ class HomePage extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
-          } else if (index == 1)
-          {
-             Navigator.pushReplacement(
+          } else if (index == 1) {
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => ReportsPage()),
             );
@@ -45,7 +70,6 @@ class HomePage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // Main Card
                         Container(
@@ -92,9 +116,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                   const Spacer(),
                                   GestureDetector(
-                                    onTap: () {
-                                      // Handle "My Reports" tap
-                                    },
+                                    onTap: () {},
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                       decoration: BoxDecoration(
@@ -117,7 +139,7 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
 
-                        const SizedBox(height: 120),
+                        const SizedBox(height: 20),
 
                         // More Services Title
                         Row(
@@ -136,41 +158,75 @@ class HomePage extends StatelessWidget {
 
                         const SizedBox(height: 16),
 
-                        // Services Icons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                         children: [
-                          ServiceIcon(
-                            iconPath: "assets/streetlight.jpg",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => UploadReport()),
-                              );
-                            },
+                        // Services Icons (Now with spacing between them)
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ServiceIcon(
+                                iconPath: "assets/streetlight.jpg",
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => UploadReport()),
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 16),
+                              ServiceIcon(
+                                iconPath: "assets/garbage.png",
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => UploadReport()),
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 16),
+                              ServiceIcon(
+                                iconPath: "assets/crack.png",
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => UploadReport()),
+                                  );
+                                },
+                              ),
+                              SizedBox(width: 16),
+                              ServiceIcon(
+                                iconPath: "assets/anotherIcon.png",
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => UploadReport()),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                          ServiceIcon(
-                            iconPath: "assets/garbage.png",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => UploadReport()),
-                              );
-                            },
-                          ),
-                          ServiceIcon(
-                            iconPath: "assets/crack.png",
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => UploadReport()),
-                              );
-                            },
-                          ),
-                        ],
-                                              ),
+                        ),
 
                         const SizedBox(height: 20),
+
+                        // Instagram-like Reports under each Service
+                        _buildInstagramPostSection(),
+
+                        // Load more button if posts are available to load
+                        if (postLimit < allPosts.length)
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                "Load More",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -180,6 +236,30 @@ class HomePage extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  Widget _buildInstagramPostSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 20),
+        Text(
+          "Reports",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        SizedBox(height: 10),
+        Column(
+          children: displayedPosts.map((post) {
+            return InstagramPost(
+              imagePath: post["image"]!,
+              caption: post["caption"]!,
+              time: post["time"]!,
+              location: post["location"]!,
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
@@ -192,20 +272,62 @@ class ServiceIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return GestureDetector(
+    return GestureDetector(
       onTap: onTap,
-    // ignore: unused_label
-    child:  Container(
-      width: 120,
-      height: 120,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black26),
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+      child: Container(
+        width: 120,
+        height: 120,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black26),
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Image.asset(iconPath, fit: BoxFit.contain),
       ),
-      child: Image.asset(iconPath, fit: BoxFit.contain),
-    ),
+    );
+  }
+}
+
+class InstagramPost extends StatelessWidget {
+  final String imagePath;
+  final String caption;
+  final String time;
+  final String location;
+
+  const InstagramPost({super.key, required this.imagePath, required this.caption, required this.time, required this.location});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8),
+      color: Colors.black, // Set card background color to black
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Image section
+          Image.asset(
+            imagePath,
+            fit: BoxFit.cover, // Ensures the image covers the space responsively
+            width: double.infinity, // Ensures the image takes full width
+            height: 250, // Increased height of the card
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(caption, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
+            child: Row(
+              children: [
+                Text("Time: $time", style: TextStyle(color: Colors.white54, fontSize: 12)),
+                SizedBox(width: 20),
+                Text("Location: $location", style: TextStyle(color: Colors.white54, fontSize: 12)),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
