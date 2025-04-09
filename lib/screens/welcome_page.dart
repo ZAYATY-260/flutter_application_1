@@ -64,6 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
+<<<<<<< HEAD
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -97,6 +98,30 @@ class _WelcomePageState extends State<WelcomePage> {
                         color: Colors.black12,
                         blurRadius: 12,
                         spreadRadius: 3,
+=======
+        child: Stack(
+          children: [
+            Positioned(
+              top: 90,
+              right: 0,
+              child: Opacity(
+                opacity: 0.08,
+                child: Icon(Icons.delete_outline, size: 210),
+              ),
+            ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 100),
+                    const Text(
+                      'Hello User\nWelcome!',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+>>>>>>> 04f54d7a29511e1ef9fd08d2a8bfb66a17d0214b
                       ),
                     ],
                   ),
