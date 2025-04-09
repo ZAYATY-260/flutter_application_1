@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/profilepage.dart';
 import 'package:flutter_application_1/screens/reports.dart';
 import 'package:flutter_application_1/screens/uploadReport.dart';
+import 'package:flutter_application_1/screens/GeminiChatPage.dart'; // make sure this exists
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   List<Map<String, String>> displayedPosts = [];
   int postLimit = 3;
 
+  int selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -32,32 +35,40 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _onTabTapped(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+
+    switch (index) {
+      case 1:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => ReportsPage()));
+        break;
+      case 2:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ProfilePage()));
+        break;
+      case 3:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => GeminiChatPage()));
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.grey[200],
-        currentIndex: 0,
+        currentIndex: selectedIndex,
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.black54,
-        onTap: (index) {
-          if (index == 2) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()),
-            );
-          } else if (index == 1) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => ReportsPage()),
-            );
-          }
-        },
+        onTap: _onTabTapped,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.article), label: "Reports"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: "Message AI"),
         ],
       ),
       body: SafeArea(
@@ -141,7 +152,6 @@ class _HomePageState extends State<HomePage> {
 
                         const SizedBox(height: 20),
 
-                        // More Services Title
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: const [
@@ -158,7 +168,6 @@ class _HomePageState extends State<HomePage> {
 
                         const SizedBox(height: 16),
 
-                        // Services Icons (Now with spacing between them)
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -166,40 +175,28 @@ class _HomePageState extends State<HomePage> {
                               ServiceIcon(
                                 iconPath: "assets/streetlight.jpg",
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => UploadReport()),
-                                  );
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => UploadReport()));
                                 },
                               ),
                               SizedBox(width: 16),
                               ServiceIcon(
                                 iconPath: "assets/garbage.png",
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => UploadReport()),
-                                  );
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => UploadReport()));
                                 },
                               ),
                               SizedBox(width: 16),
                               ServiceIcon(
                                 iconPath: "assets/crack.png",
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => UploadReport()),
-                                  );
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => UploadReport()));
                                 },
                               ),
                               SizedBox(width: 16),
                               ServiceIcon(
                                 iconPath: "assets/anotherIcon.png",
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (_) => UploadReport()),
-                                  );
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => UploadReport()));
                                 },
                               ),
                             ],
@@ -208,10 +205,8 @@ class _HomePageState extends State<HomePage> {
 
                         const SizedBox(height: 20),
 
-                        // Instagram-like Reports under each Service
                         _buildInstagramPostSection(),
 
-                        // Load more button if posts are available to load
                         if (postLimit < allPosts.length)
                           GestureDetector(
                             onTap: () {},
@@ -221,10 +216,7 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.blueAccent,
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              child: Text(
-                                "Load More",
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              child: Text("Load More", style: TextStyle(color: Colors.white)),
                             ),
                           ),
                       ],
@@ -244,10 +236,7 @@ class _HomePageState extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 20),
-        Text(
-          "Reports",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-        ),
+        Text("Reports", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         SizedBox(height: 10),
         Column(
           children: displayedPosts.map((post) {
@@ -301,17 +290,11 @@ class InstagramPost extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 8),
-      color: Colors.black, // Set card background color to black
+      color: Colors.black,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image section
-          Image.asset(
-            imagePath,
-            fit: BoxFit.cover, // Ensures the image covers the space responsively
-            width: double.infinity, // Ensures the image takes full width
-            height: 250, // Increased height of the card
-          ),
+          Image.asset(imagePath, fit: BoxFit.cover, width: double.infinity, height: 250),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(caption, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),

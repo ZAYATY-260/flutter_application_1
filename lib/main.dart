@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'screens/loading_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,7 @@ void main() async {
       storageBucket: "shaware3na-254f9.appspot.com",
     ),
   );
-
+ await dotenv.load(); // Load environment variables before running the app
   runApp(const MainApp());
 }
 
