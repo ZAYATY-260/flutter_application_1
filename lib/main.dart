@@ -4,18 +4,13 @@ import 'screens/loading_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyCej8pMs2DF98PGmy__TJUI7NkTAiNAN0c",
-      appId: "1:585980402153:android:1d5869be5f6ce9702cd378",
-      messagingSenderId: "585980402153",
-      projectId: "shaware3na-254f9",
-      storageBucket: "shaware3na-254f9.appspot.com",
-    ),
-  );
+   
+
+  // Just initialize without options on Android (since google-services.json is used)
+  await Firebase.initializeApp(); 
 
   runApp(const MainApp());
+
 }
 
 class MainApp extends StatelessWidget {

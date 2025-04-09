@@ -161,11 +161,7 @@ class _SignupState extends State<Signup> with SingleTickerProviderStateMixin {
               right: -120,
               child: Opacity(
                 opacity: 0.08,
-                child: Image.asset(
-                  'recycle-bin.png',
-                  width: 500,
-                  height: 600,
-                ),
+                child:Icon(Icons.delete_outline, size: 210),
               ),
             ),
             SingleChildScrollView(
